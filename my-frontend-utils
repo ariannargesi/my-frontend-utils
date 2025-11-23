@@ -1,0 +1,110 @@
+type LoadingSVGProps = {
+    size: string
+}
+
+function SVG(props: LoadingSVGProps) {
+    return (
+        <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            className={`text-black dark:text-white ${props.size}`}
+        >
+            <g
+                style={{
+                    transformOrigin: "center",
+                    animation: "spinner_rotate 0.75s linear infinite",
+                    filter: "url(#spinner-filter)",
+                }}
+            >
+                <circle
+                    cx="5"
+                    cy="12"
+                    r="4"
+                    fill="currentColor"
+                    style={{
+                        animation: "spinner_left 2s infinite",
+                    }}
+                />
+                <circle
+                    cx="19"
+                    cy="12"
+                    r="4"
+                    fill="currentColor"
+                    style={{
+                        animation: "spinner_right 2s infinite",
+                    }}
+                />
+            </g>
+            <defs>
+                <filter id="spinner-filter">
+                    <feGaussianBlur
+                        in="SourceGraphic"
+                        stdDeviation="1"
+                        result="y"
+                    />
+                    <feColorMatrix
+                        in="y"
+                        type="matrix"
+                        values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7"
+                        result="z"
+                    />
+                    <feBlend in="SourceGraphic" in2="z" />
+                </filter>
+                <style>
+                    {`
+        @keyframes spinner_left {
+          0% {
+            animation-timing-function: cubic-bezier(0.36, 0.62, 0.43, 0.99);
+            cx: 5px;
+          }
+          50% {
+            animation-timing-function: cubic-bezier(0.79, 0, 0.58, 0.57);
+            cx: 8px;
+          }
+        }
+  
+        @keyframes spinner_right {
+          0% {
+            animation-timing-function: cubic-bezier(0.36, 0.62, 0.43, 0.99);
+            cx: 19px;
+          }
+          50% {
+            animation-timing-function: cubic-bezier(0.79, 0, 0.58, 0.57);
+            cx: 16px;
+          }
+        }
+  
+        @keyframes spinner_rotate {
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}
+                </style>
+            </defs>
+        </svg>
+    )
+}
+
+const sizes: Record<"xsm" | "sm" | "md" | "lg" | "xlg", string> = {
+    xsm: "size-6",
+    sm: "size-6",
+    md: "size-6",
+    lg: "size-8",
+    xlg: "size-16",
+}
+
+type LoadingIndicatorProps = {
+    size?: "xsm" | "sm" | "md" | "lg" | "xlg"
+}
+
+export default function LoadingIndicator(props: LoadingIndicatorProps) {
+    return (
+        <div className={sizes[props.size || "md"]}>
+            <SVG size={sizes[props.size || "md"]} />
+            <span className="size-16"></span>
+        </div>
+    )
+}
